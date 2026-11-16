@@ -47,7 +47,7 @@ also shows such a leaflet at neighbouring stores it does not apply to.
 ## How it works
 
 1. A scheduled GitHub Actions job reads the retailer's public store and offer pages with low
-   concurrency: every store's leaflet page once a day, the offer overviews on Sunday and Thursday.
+   concurrency: every store's page once a day, the offer overviews on Sunday and Thursday.
 2. The results are written as JSON to the `data` branch (see the formats below). Each new Extra
    PDF is downloaded once to read which store(s) it names.
 3. A static frontend (GitHub Pages) loads that JSON and does everything else in the browser:
@@ -96,6 +96,13 @@ Please don't run full scans locally; they run on a schedule in GitHub Actions.
 
 Exit codes: `0` success, `1` error (store list unavailable, unknown store id, …),
 `2` sanity check failed (fewer than 700 stores or more than 5 % failures) — nothing is written.
+
+**What is requested.** The stores come from the site's sitemap (`/.sitemap.xml`, named in its
+`robots.txt`), which lists one page per store (`/service/filiale/<name>-<number>.html`; the number
+is the store id without `DE`). That page carries the store's name, address, position and special
+opening days as well as its leaflets, so a scan is one request per store. Every run reads
+`robots.txt` first and requests nothing it disallows; paths are matched as in RFC 9309, including
+the `*` and `$` wildcards (`robots.py`).
 
 ### `extra.json` format
 
@@ -156,7 +163,7 @@ Expired leaflets are not filtered by the scraper; consumers compare `valid_to` w
 so a store stays in `extra.json` when its leaflet is gone: each run reads the previous
 `extra.json` and moves leaflets that are no longer listed (or have expired) into the store's
 `past` (`with_history()` in `build.py`). A store whose page could not be read keeps its leaflets
-that are still valid; a store that is no longer in Kaufland's store list (closed) is dropped. The
+that are still valid; a store that is no longer in Kaufland's sitemap (closed) is dropped. The
 first run after this was added seeded the history once from `snapshots/` (since 2026-10-06).
 
 ### PDF check
