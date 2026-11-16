@@ -5,20 +5,20 @@ stores near a postcode (PLZ) that have the offers others don't, and take a shopp
 a printable PDF.
 
 Kaufplan-Plus continues [Kaufland Extra Finder](https://github.com/hannesgao/Kaufland-Extra-Finder)
-and widens it from Kaufland to further German supermarket chains.
+and widens it from Kaufland to further German supermarket chains: REWE, EDEKA and Netto Marken-Discount.
 
 > **Unofficial project.** Not affiliated with, endorsed by, or connected to Kaufland, REWE, EDEKA,
-> Netto or any other retailer. Their names are trademarks of their respective owners. Data may be
+> Netto Marken-Discount or any other retailer. Their names are trademarks of their respective owners. Data may be
 > incomplete or outdated; the retailer's own leaflet and website are what count.
 
 ## Status
 
-| Retailer | Stores and leaflets | Offers  | Shopping list |
-| -------- | ------------------- | ------- | ------------- |
-| Kaufland | yes                 | yes     | yes           |
-| REWE     | planned             | planned | planned       |
-| EDEKA    | planned             | planned | planned       |
-| Netto    | planned             | planned | planned       |
+| Retailer              | Stores and leaflets | Offers  | Shopping list |
+| --------------------- | ------------------- | ------- | ------------- |
+| Kaufland              | yes                 | yes     | yes           |
+| REWE                  | planned             | planned | planned       |
+| EDEKA                 | planned             | planned | planned       |
+| Netto Marken-Discount | planned             | planned | planned       |
 
 Everything below describes what exists today, which is the Kaufland part taken over from Kaufland
 Extra Finder 0.6.0. Names in the code still come from there (`kef-scrape`, `KEF_*` variables, the
