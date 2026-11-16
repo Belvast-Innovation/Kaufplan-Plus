@@ -1,25 +1,68 @@
-# Kaufland Extra Finder
+# Kaufplan-Plus
 
-Find Kaufland stores near your postcode (PLZ) that currently publish an **Extra-Angebote** leaflet —
-the store-specific offers that mydealz users call "Kaufland Extra Filialen".
+Plan the weekly shop from the supermarkets' own offers: see what a store has on offer, find the
+stores near a postcode (PLZ) that have the offers others don't, and take a shopping list along as
+a printable PDF.
 
-**→ [hannesgao.github.io/Kaufland-Extra-Finder](https://hannesgao.github.io/Kaufland-Extra-Finder/)**
-(German UI; data updated once a day, from 03:30 Berlin time)
+Kaufplan-Plus continues [Kaufland Extra Finder](https://github.com/hannesgao/Kaufland-Extra-Finder)
+and widens it from Kaufland to further German supermarket chains.
 
-> **Unofficial project.** Not affiliated with, endorsed by, or connected to Kaufland.
-> "Kaufland" is a trademark of its respective owner. Data may be incomplete or outdated —
-> always check the official leaflet before shopping.
+> **Unofficial project.** Not affiliated with, endorsed by, or connected to Kaufland, REWE, EDEKA,
+> Netto or any other retailer. Their names are trademarks of their respective owners. Data may be
+> incomplete or outdated; the retailer's own leaflet and website are what count.
+
+## Status
+
+| Retailer | Stores and leaflets | Offers  | Shopping list |
+| -------- | ------------------- | ------- | ------------- |
+| Kaufland | yes                 | yes     | yes           |
+| REWE     | planned             | planned | planned       |
+| EDEKA    | planned             | planned | planned       |
+| Netto    | planned             | planned | planned       |
+
+Everything below describes what exists today, which is the Kaufland part taken over from Kaufland
+Extra Finder 0.6.0. Names in the code still come from there (`kef-scrape`, `KEF_*` variables, the
+`/Kaufland-Extra-Finder/` base path) and will change as the project is reworked for several
+retailers. This repository does not publish a site yet; the Kaufland part is live at
+[hannesgao.github.io/Kaufland-Extra-Finder](https://hannesgao.github.io/Kaufland-Extra-Finder/)
+(German UI).
+
+## What it does
+
+- **Umkreissuche**: stores within a radius of a PLZ that currently publish an _Extra-Angebote_
+  leaflet (store-specific offers), on a map and as cards with the leaflet's days and the store's
+  special opening days.
+- **Alle Extra-Filialen**: every store with a current or upcoming Extra leaflet, sortable, with
+  an export as HTML, PNG or PDF. Stores that had such leaflets before are listed below.
+- **Extra-Angebote**: the offers of the Extra leaflets across all stores, with price, comparison
+  price, discount and the stores that have each offer, nearest first.
+- **Pokémon-Angebote**: stores near the PLZ that advertise trading-card offers.
+- **Einkaufszettel**: pick a store, collect its current and coming offers and own entries into a
+  shopping list, and open it as an A4 PDF laid out in the browser (clippings with pictures, or
+  sixteen rows per page; a page of its own for every day on which offers start).
+
+A leaflet check reads each Extra PDF to see which store it really names: the retailer's website
+also shows such a leaflet at neighbouring stores it does not apply to.
 
 ## How it works
 
-1. A scheduled GitHub Actions job scans every store's leaflet page on `filiale.kaufland.de`
-   (four times a week, low concurrency).
-2. Stores with an Extra leaflet are written to `extra.json` on the `data` branch. Each new Extra
-   PDF is downloaded once to read which store(s) it names ("NUR IN …"): Kaufland also shows such a
-   leaflet to neighbouring stores it does not apply to.
-3. A static frontend (GitHub Pages) loads that JSON and filters by distance from your PLZ —
-   entirely in your browser. No tracking, no cookies, no backend. By default it lists only stores
-   whose PDF names them.
+1. A scheduled GitHub Actions job reads the retailer's public store and offer pages with low
+   concurrency: every store's leaflet page once a day, the offer overviews on Sunday and Thursday.
+2. The results are written as JSON to the `data` branch (see the formats below). Each new Extra
+   PDF is downloaded once to read which store(s) it names.
+3. A static frontend (GitHub Pages) loads that JSON and does everything else in the browser:
+   distance from the PLZ, filters, the shopping list and its PDF. There is no backend, no
+   database, no tracking and no cookies; the shopping list stays in the browser's local storage.
+
+## Repository layout
+
+| Path                 | What it is                                                                       |
+| -------------------- | -------------------------------------------------------------------------------- |
+| `scraper/`           | Python package: scans stores, leaflets and offers; writes the JSON files         |
+| `scripts/`           | Offline tools, e.g. `build_plz.py` (GeoNames postal codes to `plz.json`)         |
+| `web/`               | Vite + TypeScript frontend without a framework, Leaflet map, German UI           |
+| `.github/workflows/` | `ci.yml`, `scrape-and-deploy.yml`, `release.yml`                                 |
+| branch `data`        | Scraper output, written only by the scheduled workflow; never merged with `main` |
 
 ## Development
 
@@ -497,8 +540,8 @@ release shows its build time instead ("Build: …").
 
 ## Data & attribution
 
-- Store, leaflet and offer data, product images: © Kaufland, retrieved from public web pages. Not
-  covered by this repository's license.
+- Store, leaflet and offer data, product images: © the respective retailer (today: Kaufland),
+  retrieved from public web pages. Not covered by this repository's license.
 - Postcode coordinates: `web/public/plz.json` is derived from the
   [GeoNames](https://www.geonames.org/) postal code dataset
   ([download](https://download.geonames.org/export/zip/)) by GeoNames, licensed under
@@ -509,11 +552,10 @@ release shows its build time instead ("Build: …").
 - Icons: [Material Symbols](https://github.com/google/material-design-icons) by Google,
   [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
-## Support
+## Origin
 
-The project is private, non-commercial and open source. If it saves you a trip, you can support it
-via [GitHub Sponsors](https://github.com/sponsors/hannesgao). Bugs and ideas:
-[issues](https://github.com/hannesgao/Kaufland-Extra-Finder/issues).
+Kaufplan-Plus is a fork of [Kaufland Extra Finder](https://github.com/hannesgao/Kaufland-Extra-Finder)
+by Hannes Gao (MIT), taken at version 0.6.0.
 
 ## License
 
